@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PortfolioDataService } from '../../services/portfolio-data.service';
 
@@ -6,6 +6,7 @@ import { PortfolioDataService } from '../../services/portfolio-data.service';
   selector: 'app-about',
   standalone: true,
   imports: [CommonModule],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section id="about">
       <div class="section-inner">
@@ -33,33 +34,39 @@ import { PortfolioDataService } from '../../services/portfolio-data.service';
             </p>
 
             <div class="about-highlights">
-              <div class="highlight" *ngFor="let highlight of dataService.highlights">
-                <div class="highlight-icon">{{ highlight.icon }}</div>
-                <div class="highlight-title">{{ highlight.title }}</div>
-                <div class="highlight-text">{{ highlight.text }}</div>
-              </div>
+              @for (highlight of dataService.highlights; track $index) {
+                <div class="highlight">
+                  <div class="highlight-icon">{{ highlight.icon }}</div>
+                  <div class="highlight-title">{{ highlight.title }}</div>
+                  <div class="highlight-text">{{ highlight.text }}</div>
+                </div>
+              }
             </div>
           </div>
 
           <div class="about-right">
             <div class="tech-label">Tech Stack</div>
             <div class="tech-grid">
-              <div class="tech-item" *ngFor="let tech of dataService.techStack">
-                <div class="tech-icon">{{ tech.icon }}</div>
-                <div class="tech-name">{{ tech.name }}</div>
-              </div>
+              @for (tech of dataService.techStack; track $index) {
+                <div class="tech-item">
+                  <div class="tech-icon">{{ tech.icon }}</div>
+                  <div class="tech-name">{{ tech.name }}</div>
+                </div>
+              }
             </div>
 
             <div class="tech-label" style="margin-top: 8px">Journey</div>
             <div class="exp-timeline">
-              <div class="exp-item" *ngFor="let exp of dataService.experience">
-                <div class="exp-dot"></div>
-                <div class="exp-content">
-                  <div class="exp-year">{{ exp.year }}</div>
-                  <div class="exp-role">{{ exp.role }}</div>
-                  <div class="exp-where">{{ exp.where }}</div>
+              @for (exp of dataService.experience; track $index) {
+                <div class="exp-item">
+                  <div class="exp-dot"></div>
+                  <div class="exp-content">
+                    <div class="exp-year">{{ exp.year }}</div>
+                    <div class="exp-role">{{ exp.role }}</div>
+                    <div class="exp-where">{{ exp.where }}</div>
+                  </div>
                 </div>
-              </div>
+              }
             </div>
           </div>
         </div>

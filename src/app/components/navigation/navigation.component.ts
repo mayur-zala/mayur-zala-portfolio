@@ -1,4 +1,4 @@
-import { Component, inject, signal, effect, HostListener } from '@angular/core';
+import { Component, inject, signal, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ThemeService } from '../../services/theme.service';
 
@@ -6,6 +6,10 @@ import { ThemeService } from '../../services/theme.service';
   selector: 'app-navigation',
   standalone: true,
   imports: [CommonModule],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  host: {
+    '(window:scroll)': 'onScroll()',
+  },
   template: `
     <nav [class.scrolled]="isScrolled()">
       <div class="nav-inner">
@@ -19,8 +23,11 @@ import { ThemeService } from '../../services/theme.service';
         </ul>
         <div class="nav-actions">
           <button class="theme-toggle" (click)="toggleTheme()" [title]="themeService.isDarkMode() ? 'Switch to Light Mode' : 'Switch to Dark Mode'">
-            <span *ngIf="themeService.isDarkMode()">☀️</span>
-            <span *ngIf="!themeService.isDarkMode()">🌙</span>
+            @if (themeService.isDarkMode()) {
+              <span>☀️</span>
+            } @else {
+              <span>🌙</span>
+            }
           </button>
           <a href="#contact" class="nav-cta">Get in touch</a>
         </div>
@@ -39,10 +46,6 @@ import { ThemeService } from '../../services/theme.service';
       <a href="#about" class="mobile-link" (click)="closeMenu()">About</a>
       <a href="#process" class="mobile-link" (click)="closeMenu()">Process</a>
       <a href="#contact" class="mobile-link" (click)="closeMenu()">Contact</a>
-      <button class="theme-toggle-mobile" (click)="toggleTheme()" [title]="themeService.isDarkMode() ? 'Switch to Light Mode' : 'Switch to Dark Mode'">
-        <span *ngIf="themeService.isDarkMode()">☀️</span>
-        <span *ngIf="!themeService.isDarkMode()">🌙</span>
-      </button>
     </div>
   `,
   styles: [`
@@ -267,7 +270,6 @@ export class NavigationComponent {
   isScrolled = signal(false);
   menuOpen = signal(false);
 
-  @HostListener('window:scroll')
   onScroll(): void {
     this.isScrolled.set(window.scrollY > 50);
   }

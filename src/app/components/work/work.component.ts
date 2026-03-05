@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PortfolioDataService } from '../../services/portfolio-data.service';
 
@@ -6,6 +6,7 @@ import { PortfolioDataService } from '../../services/portfolio-data.service';
   selector: 'app-work',
   standalone: true,
   imports: [CommonModule],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section id="work">
       <div class="section-inner">
@@ -17,22 +18,26 @@ import { PortfolioDataService } from '../../services/portfolio-data.service';
         <p class="section-sub">Demo websites built to showcase capability across different business types in Gujarat.</p>
 
         <div class="work-grid">
-          <div class="work-card" *ngFor="let work of dataService.workItems">
-            <div class="work-thumb" [style.background]="work.gradient">
-              <span style="position: relative; z-index: 1; font-size: 64px;">{{ work.icon }}</span>
-              <div class="work-thumb-overlay"></div>
-              <span class="work-thumb-label">{{ work.label }}</span>
-              <a href="#" class="work-link">↗</a>
-            </div>
-            <div class="work-body">
-              <div class="work-type">{{ work.type }} · {{ work.location }}</div>
-              <div class="work-name">{{ work.name }}</div>
-              <p class="work-desc">{{ work.description }}</p>
-              <div class="work-tags">
-                <span class="wtag" *ngFor="let tag of work.tags">{{ tag }}</span>
+          @for (work of dataService.workItems; track work.id) {
+            <div class="work-card">
+              <div class="work-thumb" [style.background]="work.gradient">
+                <span style="position: relative; z-index: 1; font-size: 64px;">{{ work.icon }}</span>
+                <div class="work-thumb-overlay"></div>
+                <span class="work-thumb-label">{{ work.label }}</span>
+                <a href="#" class="work-link">↗</a>
+              </div>
+              <div class="work-body">
+                <div class="work-type">{{ work.type }} · {{ work.location }}</div>
+                <div class="work-name">{{ work.name }}</div>
+                <p class="work-desc">{{ work.description }}</p>
+                <div class="work-tags">
+                  @for (tag of work.tags; track $index) {
+                    <span class="wtag">{{ tag }}</span>
+                  }
+                </div>
               </div>
             </div>
-          </div>
+          }
         </div>
       </div>
     </section>

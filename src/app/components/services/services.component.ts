@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PortfolioDataService } from '../../services/portfolio-data.service';
 
@@ -6,6 +6,7 @@ import { PortfolioDataService } from '../../services/portfolio-data.service';
   selector: 'app-services',
   standalone: true,
   imports: [CommonModule],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section id="services">
       <div class="section-inner">
@@ -21,14 +22,16 @@ import { PortfolioDataService } from '../../services/portfolio-data.service';
         </div>
 
         <div class="services-grid">
-          <div class="svc-card" *ngFor="let service of dataService.services">
-            <div class="svc-num">{{ service.number }}</div>
-            <span class="svc-icon">{{ service.icon }}</span>
-            <div class="svc-name">{{ service.name }}</div>
-            <p class="svc-desc">{{ service.description }}</p>
-            <div class="svc-price">{{ service.price }}</div>
-            <div class="svc-arrow">↗</div>
-          </div>
+          @for (service of dataService.services; track service.id) {
+            <div class="svc-card">
+              <div class="svc-num">{{ service.number }}</div>
+              <span class="svc-icon">{{ service.icon }}</span>
+              <div class="svc-name">{{ service.name }}</div>
+              <p class="svc-desc">{{ service.description }}</p>
+              <div class="svc-price">{{ service.price }}</div>
+              <div class="svc-arrow">↗</div>
+            </div>
+          }
         </div>
       </div>
     </section>

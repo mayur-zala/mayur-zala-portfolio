@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PortfolioDataService } from '../../services/portfolio-data.service';
 
@@ -6,6 +6,7 @@ import { PortfolioDataService } from '../../services/portfolio-data.service';
   selector: 'app-process',
   standalone: true,
   imports: [CommonModule],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section id="process">
       <div class="section-inner">
@@ -16,13 +17,17 @@ import { PortfolioDataService } from '../../services/portfolio-data.service';
         <h2 class="section-title">From WhatsApp to<br/>Live Website in 5 Days</h2>
 
         <div class="process-steps">
-          <div class="pstep" *ngFor="let step of dataService.processSteps; let isLast = last">
-            <div class="pstep-num">{{ step.number }}</div>
-            <span class="pstep-icon">{{ step.icon }}</span>
-            <div class="pstep-title">{{ step.title }}</div>
-            <p class="pstep-text">{{ step.text }}</p>
-            <div class="pstep-connector" *ngIf="!isLast">→</div>
-          </div>
+          @for (step of dataService.processSteps; track $index; let isLast = $last) {
+            <div class="pstep">
+              <div class="pstep-num">{{ step.number }}</div>
+              <span class="pstep-icon">{{ step.icon }}</span>
+              <div class="pstep-title">{{ step.title }}</div>
+              <p class="pstep-text">{{ step.text }}</p>
+              @if (!isLast) {
+                <div class="pstep-connector">→</div>
+              }
+            </div>
+          }
         </div>
       </div>
     </section>
