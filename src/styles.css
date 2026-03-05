@@ -1,0 +1,135 @@
+/* ─── IMPORTS ─────────────────────────────────── */
+@import 'https://fonts.googleapis.com/css2?family=Clash+Display:wght@400;500;600;700&family=Satoshi:wght@300;400;500;700&family=JetBrains+Mono:wght@400;500&display=swap';
+
+/* ─── ROOT & RESET ─────────────────────────────── */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  font-family: 'Satoshi', sans-serif;
+  overflow-x: hidden;
+  line-height: 1.6;
+}
+
+/* ─── DARK THEME (DEFAULT) ─────────────────────── */
+:root[data-theme='dark'],
+:root {
+  --bg: #080b10;
+  --bg2: #0d1117;
+  --bg3: #111820;
+  --surface: #141c26;
+  --surface2: #1a2435;
+  --border: rgba(255, 255, 255, 0.06);
+  --border2: rgba(255, 255, 255, 0.1);
+  --accent: #00e5a0;
+  --accent2: #00b87a;
+  --accent-dim: rgba(0, 229, 160, 0.08);
+  --accent-glow: rgba(0, 229, 160, 0.25);
+  --text: #e8f0fe;
+  --text2: #8899aa;
+  --text3: #445566;
+  --white: #ffffff;
+  --red: #ff4d6d;
+  --amber: #ffb830;
+  --overlay: linear-gradient(to bottom, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.6) 100%);
+}
+
+/* ─── LIGHT THEME ──────────────────────────────── */
+:root[data-theme='light'] {
+  --bg: #ffffff;
+  --bg2: #f8f9fa;
+  --bg3: #f0f2f5;
+  --surface: #ffffff;
+  --surface2: #f0f2f5;
+  --border: rgba(0, 0, 0, 0.1);
+  --border2: rgba(0, 0, 0, 0.15);
+  --accent: #00c878;
+  --accent2: #009d5c;
+  --accent-dim: rgba(0, 200, 120, 0.08);
+  --accent-glow: rgba(0, 200, 120, 0.25);
+  --text: #1a1a1a;
+  --text2: #525252;
+  --text3: #888888;
+  --white: #000000;
+  --red: #ff4d6d;
+  --amber: #ffb830;
+  --overlay: transparent;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* ─── SCROLLBAR ────────────────────────────────── */
+::-webkit-scrollbar {
+  width: 3px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--accent2);
+  border-radius: 2px;
+}
+
+/* ─── ANIMATIONS ────────────────────────────────– */
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-30px);
+  }
+}
+
+@keyframes blink {
+  0%,
+  100% {
+    opacity: 1;
+    box-shadow: 0 0 0 0 var(--accent-glow);
+  }
+  50% {
+    opacity: 0.6;
+    box-shadow: 0 0 0 6px transparent;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ─── UTILITY CLASSES ──────────────────────────── */
+.reveal {
+  animation: fadeInUp 0.8s ease forwards;
+  opacity: 0;
+}
+
+.reveal-left {
+  animation: fadeInUp 0.8s ease forwards;
+  opacity: 0;
+}
+
+.reveal-right {
+  animation: fadeInUp 0.8s ease 0.2s forwards;
+  opacity: 0;
+}
