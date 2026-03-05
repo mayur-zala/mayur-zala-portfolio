@@ -24,13 +24,26 @@ import { ThemeService } from '../../services/theme.service';
           </button>
           <a href="#contact" class="nav-cta">Get in touch</a>
         </div>
-        <div class="hamburger" (click)="toggleMenu()">
+        <div class="hamburger" [class.active]="menuOpen()" (click)="toggleMenu()">
           <span></span>
           <span></span>
           <span></span>
         </div>
       </div>
     </nav>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" [class.open]="menuOpen()">
+      <a href="#services" class="mobile-link" (click)="closeMenu()">Services</a>
+      <a href="#work" class="mobile-link" (click)="closeMenu()">Work</a>
+      <a href="#about" class="mobile-link" (click)="closeMenu()">About</a>
+      <a href="#process" class="mobile-link" (click)="closeMenu()">Process</a>
+      <a href="#contact" class="mobile-link" (click)="closeMenu()">Contact</a>
+      <button class="theme-toggle-mobile" (click)="toggleTheme()" [title]="themeService.isDarkMode() ? 'Switch to Light Mode' : 'Switch to Dark Mode'">
+        <span *ngIf="themeService.isDarkMode()">☀️</span>
+        <span *ngIf="!themeService.isDarkMode()">🌙</span>
+      </button>
+    </div>
   `,
   styles: [`
     :host {
@@ -69,6 +82,8 @@ import { ThemeService } from '../../services/theme.service';
       color: var(--accent);
       text-decoration: none;
       letter-spacing: 0.05em;
+      z-index: 101;
+      position: relative;
     }
 
     .nav-links {
@@ -155,6 +170,8 @@ import { ThemeService } from '../../services/theme.service';
       gap: 5px;
       cursor: pointer;
       padding: 4px;
+      z-index: 101;
+      position: relative;
     }
 
     .hamburger span {
@@ -163,6 +180,70 @@ import { ThemeService } from '../../services/theme.service';
       background: var(--text);
       transition: all 0.3s;
       display: block;
+    }
+
+    .hamburger.active span:nth-child(1) {
+      transform: rotate(45deg) translate(10px, 10px);
+    }
+
+    .hamburger.active span:nth-child(2) {
+      opacity: 0;
+    }
+
+    .hamburger.active span:nth-child(3) {
+      transform: rotate(-45deg) translate(7px, -6px);
+    }
+
+    /* Mobile Menu */
+    .mobile-menu {
+      position: fixed;
+      inset: 0;
+      background: var(--bg2);
+      z-index: 99;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 32px;
+      padding-top: 72px;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .mobile-menu.open {
+      display: flex;
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .mobile-link {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--text);
+      text-decoration: none;
+      font-family: 'Clash Display', sans-serif;
+      transition: color 0.2s;
+    }
+
+    .mobile-link:hover {
+      color: var(--accent);
+    }
+
+    .theme-toggle-mobile {
+      background: transparent;
+      border: 1px solid var(--border2);
+      color: var(--text2);
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .theme-toggle-mobile:hover {
+      border-color: var(--accent);
+      color: var(--accent);
     }
 
     @media (max-width: 768px) {
@@ -184,6 +265,7 @@ import { ThemeService } from '../../services/theme.service';
 export class NavigationComponent {
   themeService = inject(ThemeService);
   isScrolled = signal(false);
+  menuOpen = signal(false);
 
   @HostListener('window:scroll')
   onScroll(): void {
@@ -195,6 +277,10 @@ export class NavigationComponent {
   }
 
   toggleMenu(): void {
-    // Mobile menu toggle - implement as needed
+    this.menuOpen.update(value => !value);
+  }
+
+  closeMenu(): void {
+    this.menuOpen.set(false);
   }
 }
